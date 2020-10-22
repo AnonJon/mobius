@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 
 import axios from "axios";
@@ -78,7 +78,7 @@ const CssTextField = withStyles({
   },
 })(TextField);
 
-const BuyModal = (props) => {
+const BuyModal = ({ onChildClick, uuid, amount }) => {
   const classes = useStyles();
 
   const [modalStyle] = useState(getModalStyle);
@@ -103,13 +103,17 @@ const BuyModal = (props) => {
 
     axios
       .put(
-        `https://vtyhed13i2.execute-api.us-east-1.amazonaws.com/bom/1001/bomitem/${props.uuid}`,
-        { amount: props.amount },
+        `https://vtyhed13i2.execute-api.us-east-1.amazonaws.com/bom/1001/bomitem/${uuid}`,
+        { amount: amount },
         config
       )
       .then((res) => {
-        console.log(res);
+        console.log(res.data.items[0].fields.quantity);
+
+        onChildClick(res.data.items[0].fields.quantity);
       });
+
+    handleClose();
   };
 
   return (
@@ -131,7 +135,7 @@ const BuyModal = (props) => {
               <CssTextField
                 id="amount"
                 name="amount"
-                label={props.amount}
+                label={amount}
                 type="text"
                 margin="normal"
                 required
@@ -139,7 +143,7 @@ const BuyModal = (props) => {
               />
               <h5>Confirm amount</h5>
 
-              <Button color="primary" type="submit" onClick={handleClose}>
+              <Button color="primary" type="submit">
                 Buy
               </Button>
             </form>

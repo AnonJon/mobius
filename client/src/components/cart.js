@@ -23,6 +23,11 @@ const Cart = () => {
       setItems(res.data.items);
     });
   }, []);
+  let item_total = 0;
+  items.forEach((item) => {
+    let x = item.fields.quantity * item.fields.item_unit_cost;
+    item_total += x;
+  });
 
   return (
     <div>
@@ -37,6 +42,9 @@ const Cart = () => {
           </div>
         );
       })}
+      <h1>--------------------------------------</h1>
+      <h1>Total Cost</h1>
+      <h1>${item_total}</h1>
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
@@ -22,6 +22,13 @@ const Item = (props) => {
   );
   const [newTotal, setNewTotal] = useState(false);
 
+  const handleChildClick = (amount) => {
+    setquantity(amount);
+    console.log(quantity);
+    setTotal(quantity * cost);
+    console.log(quantity, total);
+  };
+
   const onChangeAmount = (e) => {
     setTotal(e.target.value * cost);
     setquantity(e.target.value);
@@ -32,7 +39,11 @@ const Item = (props) => {
       <div className={classes.ul}>
         <p>Quantity: </p>
         <TextField label={quantity} onChange={onChangeAmount} />
-        <BuyModal uuid={props.uuid} amount={quantity} />
+        <BuyModal
+          uuid={props.uuid}
+          amount={quantity}
+          onChildClick={handleChildClick}
+        />
       </div>
 
       <p>Cost Per Item: ${Math.round(cost * 100) / 100}</p>
@@ -42,7 +53,7 @@ const Item = (props) => {
           props.item.fields.quantity * props.item.fields.item_unit_cost * 100
         ) / 100}
       </p>
-      {!newTotal ? null : <h2>New Total: ${Math.round(total * 100) / 100}</h2>}
+      {newTotal ? <h2>New Total: ${Math.round(total * 100) / 100}</h2> : null}
     </div>
   );
 };
