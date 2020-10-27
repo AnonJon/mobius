@@ -1,20 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { makeStyles } from "@material-ui/core/styles";
 import axios from "axios";
 import Item from "./item";
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    display: "flex",
-  },
-  ul: {
-    display: "flex",
-  },
-}));
-
 const Cart = () => {
-  const classes = useStyles();
   const [items, setItems] = useState([]);
+  const [addedItem, setAddedItem] = useState(0);
 
   useEffect(() => {
     const getURL =
@@ -29,6 +19,10 @@ const Cart = () => {
     item_total += x;
   });
 
+  const handleAmountChange = (amount) => {
+    setAddedItem(amount);
+  };
+
   return (
     <div>
       <h1>Cart Items</h1>
@@ -37,14 +31,18 @@ const Cart = () => {
           <div>
             <h1>{item.model}</h1>
             <ul>
-              <Item uuid={item.fields.uuid} item={item} />
+              <Item
+                uuid={item.fields.uuid}
+                item={item}
+                handleAmountChange={handleAmountChange}
+              />
             </ul>
           </div>
         );
       })}
       <h1>--------------------------------------</h1>
       <h1>Total Cost</h1>
-      <h1>${item_total}</h1>
+      <h1>${item_total + addedItem}</h1>
     </div>
   );
 };

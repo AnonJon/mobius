@@ -97,20 +97,26 @@ const BuyModal = ({ onChildClick, uuid, amount }) => {
     const config = {
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
       },
     };
+    const body = JSON.stringify({
+      amount: amount,
+    });
 
     axios
       .put(
         `https://vtyhed13i2.execute-api.us-east-1.amazonaws.com/bom/1001/bomitem/${uuid}`,
-        { amount: amount },
+        body,
         config
       )
       .then((res) => {
         console.log(res.data.items[0].fields.quantity);
+        console.log(res.data.items[0].fields.updated_at);
 
-        onChildClick(res.data.items[0].fields.quantity);
+        onChildClick(
+          res.data.items[0].fields.quantity,
+          res.data.items[0].fields.updated_at
+        );
       });
 
     handleClose();
